@@ -46,6 +46,6 @@ namespace TP01_Révisions.Models.EntityFramework
 
         [ForeignKey(nameof(IdType))]
         [InverseProperty("ProduitsTypesProduit")]
-        public virtual TypeProduit TypesProduitsProduit { get; set; } = null!;
+        public virtual TypeProduit TypesProduitProduit { get; set; } = null!;
     }
 }

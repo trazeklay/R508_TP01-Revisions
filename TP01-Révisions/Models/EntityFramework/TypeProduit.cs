@@ -15,7 +15,7 @@ namespace TP01_Révisions.Models.EntityFramework
         public string? NomTypeProduit { get; set; }
 
 
-        [InverseProperty("TypesProduitProduits")]
+        [InverseProperty("TypesProduitProduit")]
         public virtual ICollection<Produit> ProduitsTypesProduit { get; set; } = new List<Produit>();
     }
 }

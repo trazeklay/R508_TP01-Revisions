@@ -14,11 +14,11 @@ namespace TP01_Révisions.Models.EntityFramework
 
         }
 
-        public virtual DbSet<Produit> Produits { get; set; }
+        public virtual DbSet<Produit> Produits { get; set; } = null!;
 
-        public virtual DbSet<Marque> Marques { get; set; }
+        public virtual DbSet<Marque> Marques { get; set; } = null!;
 
-        public virtual DbSet<TypeProduit> TypesProduit { get; set; }
+        public virtual DbSet<TypeProduit> TypesProduit { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,7 +30,7 @@ namespace TP01_Révisions.Models.EntityFramework
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("fk_pdt_mar");
 
-                entity.HasOne(pdttpd => pdttpd.TypesProduitsProduit).WithMany(tpdpdt => tpdpdt.ProduitsTypesProduit)
+                entity.HasOne(pdttpd => pdttpd.TypesProduitProduit).WithMany(tpdpdt => tpdpdt.ProduitsTypesProduit)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("fk_pdt_tpd");
             });
