@@ -14,7 +14,6 @@ namespace TP01_Révisions.Models.EntityFramework
         [Column("tpd_name")]
         public string? NomTypeProduit { get; set; }
 
-
         [InverseProperty("TypesProduitProduit")]
         public virtual ICollection<Produit> ProduitsTypesProduit { get; set; } = new List<Produit>();
     }

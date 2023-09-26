@@ -46,7 +46,6 @@ namespace TP01_Révisions.Models.DataManager
             await tP01DbContext.SaveChangesAsync();
         }
 
-
         public async Task UpdateAsync(Produit entityToUpdate, Produit entity)
         {
             tP01DbContext.Entry(entityToUpdate).State = EntityState.Modified;

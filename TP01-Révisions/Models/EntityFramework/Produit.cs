@@ -40,6 +40,7 @@ namespace TP01_Révisions.Models.EntityFramework
         [Column("pdt_stock_max")]
         public int StockMax { get; set; }
 
+        // Forign Keys
         [ForeignKey(nameof(IdMarque))]
         [InverseProperty("ProduitsMarque")]
         public virtual Marque MarquesProduits { get; set; } = null!;
