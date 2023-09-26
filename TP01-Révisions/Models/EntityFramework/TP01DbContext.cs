@@ -14,11 +14,11 @@ namespace TP01_Révisions.Models.EntityFramework
 
         }
 
-        public virtual DbSet<Produit> Produits { get; set; } = null!;
+        public virtual DbSet<Produit> Produits { get; set; }
 
-        public virtual DbSet<Marque> Marques { get; set; } = null!;
+        public virtual DbSet<Marque> Marques { get; set; }
 
-        public virtual DbSet<TypeProduit> TypesProduit { get; set; } = null!;
+        public virtual DbSet<TypeProduit> TypesProduit { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
