@@ -62,7 +62,7 @@ namespace TP01_Révisions.Controllers
             }
 
             // Checks if both ids are the same
-            if (typeProduitToUpdate.Value.IdTypeProduit != typeProduit.IdTypeProduit)
+            if (id != typeProduit.IdTypeProduit)
             {
                 return BadRequest();
             }
@@ -79,7 +79,7 @@ namespace TP01_Révisions.Controllers
             var isTypeProduitExisting = await dataRepository.GetByIdAsync(typeProduit.IdTypeProduit);
 
             // Checks if id is already existing
-            if (isTypeProduitExisting == null)
+            if (isTypeProduitExisting != null)
             {
                 return BadRequest();
             }
