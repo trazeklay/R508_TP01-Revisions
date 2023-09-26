@@ -43,7 +43,7 @@ namespace TP01_Révisions.Models.EntityFramework
                 entity.HasKey(tpd => tpd.IdTypeProduit).HasName("pk_tpd");
             });
 
-            OnModelCreating(modelBuilder);
+            OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder builder);
