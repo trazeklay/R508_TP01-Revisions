@@ -74,12 +74,12 @@ namespace TP01_Révisions.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TypeProduit>> PostTypeProduit(TypeProduit typeProduit)
+        public async Task<ActionResult<Marque>> PostTypeProduit(TypeProduit typeProduit)
         {
-            var isTypeProduitExisting = await dataRepository.GetByIdAsync(typeProduit.IdTypeProduit);
+            var existingTypeProduit = await dataRepository.GetByIdAsync(typeProduit.IdTypeProduit);
 
-            // Checks if id is already existing
-            if (isTypeProduitExisting != null)
+            // Checks if marque already exists
+            if (existingTypeProduit.Value != null)
             {
                 return BadRequest();
             }

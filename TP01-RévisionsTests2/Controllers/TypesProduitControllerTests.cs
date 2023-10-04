@@ -136,10 +136,11 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             TypeProduit existingTypeProduit = new TypeProduit { IdTypeProduit = 1, NomTypeProduit = "Electronics" };
+            TypeProduit newTypeProduit = new TypeProduit { IdTypeProduit = 1, NomTypeProduit = "Computers" };
             _mockRepo.Setup(repo => repo.GetByIdAsync(existingTypeProduit.IdTypeProduit)).ReturnsAsync(new ActionResult<TypeProduit>(existingTypeProduit));
 
             // Act
-            var result = await _controller.PostTypeProduit(existingTypeProduit);
+            var result = await _controller.PostTypeProduit(newTypeProduit);
 
             // Assert
             Assert.IsInstanceOfType(result.Result, typeof(BadRequestResult));
@@ -149,7 +150,7 @@ namespace TP01_Révisions.Controllers.Tests
         public async Task PostTypeProduit_ReturnsCreated_WhenTypeProduitIsAddedSuccessfully()
         {
             // Arrange
-            TypeProduit typeProduit = new TypeProduit { IdTypeProduit = 2, NomTypeProduit = "Electronics" };
+            TypeProduit typeProduit = new TypeProduit { IdTypeProduit = 2, NomTypeProduit = "Computers" };
             _mockRepo.Setup(repo => repo.GetByIdAsync(typeProduit.IdTypeProduit)).ReturnsAsync(new ActionResult<TypeProduit>((TypeProduit)null));
 
             // Act
@@ -188,6 +189,5 @@ namespace TP01_Révisions.Controllers.Tests
             // Assert
             Assert.IsInstanceOfType(result.Result, typeof(OkResult));
         }
-
     }
 }

@@ -62,7 +62,7 @@ namespace TP01_Révisions.Controllers
             }
 
             // Checks if both ids are the same
-            if (produitToUpdate.Value.IdProduit != produit.IdProduit)
+            if (id != produit.IdProduit)
             {
                 return BadRequest();
             }
@@ -76,16 +76,16 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Produit>> PostProduit(Produit produit)
         {
-            var isProduitExisting = await dataRepository.GetByIdAsync(produit.IdProduit);
+            var existingProduit = await dataRepository.GetByIdAsync(produit.IdProduit);
 
-            // Checks if id is already existing
-            if (isProduitExisting == null)
+            // Checks if marque already exists
+            if (existingProduit.Value != null)
             {
                 return BadRequest();
             }
 
             // Checks if every required data is here
-            if(produit.IdMarque == null || produit.IdType == null)
+            if (produit.IdMarque == null || produit.IdType == null)
             {
                 return BadRequest();
             }
