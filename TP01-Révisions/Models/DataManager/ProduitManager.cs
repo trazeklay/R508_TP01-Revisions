@@ -28,8 +28,19 @@ namespace TP01_Révisions.Models.DataManager
         {
             return await tP01DbContext.Produits.FirstOrDefaultAsync(tpd => tpd.IdProduit == id);
         }
+        
 
         public async Task<ActionResult<Produit>> GetByStringAsync(string str)
+        {
+            return await tP01DbContext.Produits.FirstOrDefaultAsync(tpd => tpd.NomProduit == str);
+        }
+        
+        public async Task<ActionResult<Produit>> GetSummaryByIdAsync(int id)
+        {
+            return await tP01DbContext.Produits.FirstOrDefaultAsync(tpd => tpd.IdProduit == id);
+        }
+
+        public async Task<ActionResult<Produit>> GetSummaryByStringAsync(string str)
         {
             return await tP01DbContext.Produits.FirstOrDefaultAsync(tpd => tpd.NomProduit == str);
         }

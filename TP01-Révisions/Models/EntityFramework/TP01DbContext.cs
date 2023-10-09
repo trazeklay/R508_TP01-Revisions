@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TP01_Révisions.Models.DTO;
 
 namespace TP01_Révisions.Models.EntityFramework
 {
