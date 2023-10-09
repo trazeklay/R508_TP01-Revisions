@@ -23,7 +23,18 @@ namespace TP01_Révisions.Controllers.Tests
         public void Setup()
         {
             _mockRepo = new Mock<IDataRepository<Marque>>();
+            context = new TP01DbContext();
             _controller = new MarquesController(_mockRepo.Object);
+        }
+
+        [TestMethod]
+        public async Task GetAllMarques_ReturnsNotFound_WhenNoMarquesInDatabase()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
         }
 
         [TestMethod]

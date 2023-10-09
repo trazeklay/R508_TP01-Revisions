@@ -16,6 +16,22 @@ namespace TP01_Révisions.Controllers
         }
 
         [HttpGet]
+        [Route("")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Marque>> GetAllMarques()
+        {
+            var marques = await dataRepository.GetAllAsync();
+
+            if(marques == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
         [Route("ById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
