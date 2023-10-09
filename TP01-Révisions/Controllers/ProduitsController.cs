@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TP01_Révisions.Models.DTO;
 using TP01_Révisions.Models.EntityFramework;
 using TP01_Révisions.Models.Repository;
 
@@ -9,6 +10,8 @@ namespace TP01_Révisions.Controllers
     public class ProduitsController : ControllerBase
     {
         private readonly IDataRepository<Produit> dataRepository;
+        private readonly IDataRepositoryProduitDetailDTO dataRepositoryProduitDetailDTO;
+        private readonly IDataRepositoryProduitDTO dataRepositoryProduitDTO;
 
         public ProduitsController(IDataRepository<Produit> _dataRepository)
         {
@@ -19,9 +22,9 @@ namespace TP01_Révisions.Controllers
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Marque>> GetAllProduits()
+        public async Task<ActionResult<ProduitDto>> GetAllProduits()
         {
-            var produits = await dataRepository.GetAllAsync();
+            var produits = await dataRepositoryProduitDTO.GetAllAsync();
 
             if (produits == null)
             {
@@ -35,9 +38,9 @@ namespace TP01_Révisions.Controllers
         [Route("ById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Produit>> GetProduitById(int id)
+        public async Task<ActionResult<ProduitDetailDto>> GetProduitById(int id)
         {
-            var produit = await dataRepository.GetByIdAsync(id);
+            var produit = await dataRepositoryProduitDetailDTO.GetByIdAsync(id);
 
             // Check if produit exists
             if (produit.Value == null)
@@ -52,9 +55,43 @@ namespace TP01_Révisions.Controllers
         [Route("ByNom/{str}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Produit>> GetProduitByNom(string str)
+        public async Task<ActionResult<ProduitDetailDto>> GetProduitByNom(string str)
         {
-            var produit = await dataRepository.GetByStringAsync(str);
+            var produit = await dataRepositoryProduitDetailDTO.GetByStringAsync(str);
+
+            // Checks if such a produit exists
+            if (produit.Value == null)
+            {
+                return NotFound();
+            }
+
+            return produit;
+        }
+
+        [HttpGet]
+        [Route("SummaryById/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ProduitDto>> GetProduitSummaryById(int id)
+        {
+            var produit = await dataRepositoryProduitDTO.GetSummaryByIdAsync(id);
+
+            // Check if produit exists
+            if (produit.Value == null)
+            {
+                return NotFound();
+            }
+
+            return produit;
+        }
+
+        [HttpGet]
+        [Route("SummaryByNom/{str}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ProduitDto>> GetProduitSummaryByNom(string str)
+        {
+            var produit = await dataRepositoryProduitDTO.GetSummaryByStringAsync(str);
 
             // Checks if such a produit exists
             if (produit.Value == null)
@@ -71,7 +108,7 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Produit>> PutProduit(int id, Produit produit)
         {
-            var produitToUpdate = await dataRepository.GetByIdAsync(id);
+            var produitToUpdate = await dataRepositoryProduitDTO.GetSummaryByIdAsync(id);
 
             // Check if produit exists
             if (produitToUpdate.Value == null)
@@ -94,7 +131,7 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Produit>> PostProduit(Produit produit)
         {
-            var existingProduit = await dataRepository.GetByIdAsync(produit.IdProduit);
+            var existingProduit = await dataRepositoryProduitDTO.GetSummaryByIdAsync(produit.IdProduit);
 
             // Checks if marque already exists
             if (existingProduit.Value != null)
@@ -117,7 +154,7 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Produit>> DeleteProduit(int id)
         {
-            var produit = await dataRepository.GetByIdAsync(id);
+            var produit = await dataRepositoryProduitDTO.GetSummaryByIdAsync(id);
 
             // Checks if product exists
             if (produit.Value == null)

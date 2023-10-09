@@ -19,7 +19,7 @@ namespace TP01_Révisions.Controllers
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Marque>> GetAllTypesProduit()
+        public async Task<ActionResult<TypeProduit>> GetAllTypesProduit()
         {
             var typesProduit = await dataRepository.GetAllAsync();
 
