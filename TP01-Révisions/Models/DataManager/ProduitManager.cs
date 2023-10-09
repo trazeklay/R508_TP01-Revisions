@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using TP01_Révisions.Models.EntityFramework;
 using TP01_Révisions.Models.Repository;
+using TP01_Révisions.Models.DTO;
 
 namespace TP01_Révisions.Models.DataManager
 {
-    public class ProduitManager : IDataRepository<Produit>
+    public class ProduitManager : IDataRepository<Produit>, IDataRepositoryProduitDTO, IDataRepositoryProduitDetailDTO
     {
         readonly TP01DbContext tP01DbContext;
 
@@ -19,30 +20,80 @@ namespace TP01_Révisions.Models.DataManager
             tP01DbContext = context;
         }
 
-        public async Task<ActionResult<IEnumerable<Produit>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<ProduitDto>>> GetAllAsync()
         {
-            return await tP01DbContext.Produits.ToListAsync();
+            var produitsDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDto
+            {
+                Id = pdtToDto.IdProduit,
+                Nom = pdtToDto.NomProduit,
+                Marque = pdtToDto.MarquesProduits.NomMarque,
+                Type = pdtToDto.TypesProduitProduit.NomTypeProduit
+            }).ToListAsync();
+
+            return produitsDto;
         }
 
-        public async Task<ActionResult<Produit>> GetByIdAsync(int id)
+        public async Task<ActionResult<ProduitDetailDto>> GetByIdAsync(int id)
         {
-            return await tP01DbContext.Produits.FirstOrDefaultAsync(tpd => tpd.IdProduit == id);
+            var produitDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDetailDto
+            {
+                Id = pdtToDto.IdProduit,
+                Nom = pdtToDto.NomProduit,
+                Marque = pdtToDto.MarquesProduits.NomMarque,
+                Type = pdtToDto.TypesProduitProduit.NomTypeProduit,
+                Description = pdtToDto.Description,
+                Nomphoto = pdtToDto.NomPhoto, 
+                Uriphoto = pdtToDto.UriPhoto,
+                Stock = pdtToDto.StockReel,
+                EnReappro = pdtToDto.StockReel < pdtToDto.StockMin
+                }).FirstOrDefaultAsync(pdtDto => pdtDto.Id == id);
+
+            return produitDto;
         }
         
 
-        public async Task<ActionResult<Produit>> GetByStringAsync(string str)
+        public async Task<ActionResult<ProduitDetailDto>> GetByStringAsync(string str)
         {
-            return await tP01DbContext.Produits.FirstOrDefaultAsync(tpd => tpd.NomProduit == str);
+            var produitDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDetailDto
+            {
+                Id = pdtToDto.IdProduit,
+                Nom = pdtToDto.NomProduit,
+                Marque = pdtToDto.MarquesProduits.NomMarque,
+                Type = pdtToDto.TypesProduitProduit.NomTypeProduit,
+                Description = pdtToDto.Description,
+                Nomphoto = pdtToDto.NomPhoto,
+                Uriphoto = pdtToDto.UriPhoto,
+                Stock = pdtToDto.StockReel,
+                EnReappro = pdtToDto.StockReel < pdtToDto.StockMin
+            }).FirstOrDefaultAsync(pdtDto => pdtDto.Nom == str);
+
+            return produitDto;
         }
         
-        public async Task<ActionResult<Produit>> GetSummaryByIdAsync(int id)
+        public async Task<ActionResult<ProduitDto>> GetSummaryByIdAsync(int id)
         {
-            return await tP01DbContext.Produits.FirstOrDefaultAsync(tpd => tpd.IdProduit == id);
+            var produitDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDto
+            {
+                Id = pdtToDto.IdProduit,
+                Nom = pdtToDto.NomProduit,
+                Marque = pdtToDto.MarquesProduits.NomMarque,
+                Type = pdtToDto.TypesProduitProduit.NomTypeProduit
+            }).FirstOrDefaultAsync(pdtDto => pdtDto.Id == id);
+
+            return produitDto;
         }
 
-        public async Task<ActionResult<Produit>> GetSummaryByStringAsync(string str)
+        public async Task<ActionResult<ProduitDto>> GetSummaryByStringAsync(string str)
         {
-            return await tP01DbContext.Produits.FirstOrDefaultAsync(tpd => tpd.NomProduit == str);
+            var produitDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDto
+            {
+                Id = pdtToDto.IdProduit,
+                Nom = pdtToDto.NomProduit,
+                Marque = pdtToDto.MarquesProduits.NomMarque,
+                Type = pdtToDto.TypesProduitProduit.NomTypeProduit
+            }).FirstOrDefaultAsync(pdtDto => pdtDto.Nom == str);
+
+            return produitDto;
         }
 
         public async Task AddAsync(Produit entity)
