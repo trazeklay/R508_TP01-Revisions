@@ -4,6 +4,8 @@ using TP01_Révisions.Models.Repository;
 
 namespace TP01_Révisions.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class TypesProduitController : ControllerBase
     {
         private readonly IDataRepository<TypeProduit> dataRepository;

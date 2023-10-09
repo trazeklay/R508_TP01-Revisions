@@ -1,4 +1,4 @@
-﻿namespace TP01_Révisions.Models.EntityFramework
+﻿namespace TP01_Révisions.Models.DTO
 {
     public class MarqueDto
     {
