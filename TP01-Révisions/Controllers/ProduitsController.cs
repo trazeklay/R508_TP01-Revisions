@@ -2,6 +2,7 @@
 using TP01_Révisions.Models.DTO;
 using TP01_Révisions.Models.EntityFramework;
 using TP01_Révisions.Models.Repository;
+using AutoMapper;
 
 namespace TP01_Révisions.Controllers
 {
@@ -12,10 +13,16 @@ namespace TP01_Révisions.Controllers
         private readonly IDataRepository<Produit> dataRepository;
         private readonly IDataRepositoryProduitDetailDTO dataRepositoryProduitDetailDTO;
         private readonly IDataRepositoryProduitDTO dataRepositoryProduitDTO;
+        private readonly IMapper mapper;
 
         public ProduitsController(IDataRepository<Produit> _dataRepository)
         {
             dataRepository = _dataRepository;
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<ProduitDto, Produit>();
+            });
+            mapper = config.CreateMapper();
         }
 
         [HttpGet]
@@ -108,10 +115,10 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Produit>> PutProduit(int id, Produit produit)
         {
-            var produitToUpdate = await dataRepositoryProduitDTO.GetSummaryByIdAsync(id);
+            var produitDtoToUpdate = await dataRepositoryProduitDTO.GetSummaryByIdAsync(id);
 
             // Check if produit exists
-            if (produitToUpdate.Value == null)
+            if (produitDtoToUpdate.Value == null)
             {
                 return NotFound();
             }
@@ -122,7 +129,9 @@ namespace TP01_Révisions.Controllers
                 return BadRequest();
             }
 
-            await dataRepository.UpdateAsync(produitToUpdate.Value, produit);
+            Produit produitToUpdate = mapper.Map<Produit>(produitDtoToUpdate.Value);
+
+            await dataRepository.UpdateAsync(produitToUpdate, produit);
             return Ok();
         }
 
@@ -154,15 +163,17 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Produit>> DeleteProduit(int id)
         {
-            var produit = await dataRepositoryProduitDTO.GetSummaryByIdAsync(id);
+            var produitDto = await dataRepositoryProduitDTO.GetSummaryByIdAsync(id);
 
             // Checks if product exists
-            if (produit.Value == null)
+            if (produitDto.Value == null)
             {
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(produit.Value);
+            Produit produitToDelete = mapper.Map<Produit>(produitDto.Value);
+
+            await dataRepository.DeleteAsync(produitToDelete);
             return Ok();
         }
     }

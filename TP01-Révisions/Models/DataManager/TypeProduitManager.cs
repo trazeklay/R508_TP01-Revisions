@@ -7,7 +7,7 @@ namespace TP01_Révisions.Models.DataManager
 {
     public class TypeProduitManager : IDataRepository<TypeProduit>
     {
-        readonly TP01DbContext tP01DbContext;
+        readonly TP01DbContext tp01DbContext;
 
         public TypeProduitManager()
         {
@@ -16,42 +16,42 @@ namespace TP01_Révisions.Models.DataManager
 
         public TypeProduitManager(TP01DbContext context)
         {
-            tP01DbContext = context;
+            tp01DbContext = context;
         }
 
         public async Task<ActionResult<IEnumerable<TypeProduit>>> GetAllAsync()
         {
-            return await tP01DbContext.TypesProduit.ToListAsync();
+            return await tp01DbContext.TypesProduit.ToListAsync();
         }
 
         public async Task<ActionResult<TypeProduit>> GetByIdAsync(int id)
         {
-            return await tP01DbContext.TypesProduit.FirstOrDefaultAsync(tpd => tpd.IdTypeProduit == id);
+            return await tp01DbContext.TypesProduit.FirstOrDefaultAsync(tpd => tpd.IdTypeProduit == id);
         }
 
         public async Task<ActionResult<TypeProduit>> GetByStringAsync(string str)
         {
-            return await tP01DbContext.TypesProduit.FirstOrDefaultAsync(tpd => tpd.NomTypeProduit == str);
+            return await tp01DbContext.TypesProduit.FirstOrDefaultAsync(tpd => tpd.NomTypeProduit == str);
         }
 
         public async Task AddAsync(TypeProduit entity)
         {
-            await tP01DbContext.TypesProduit.AddAsync(entity);
-            await tP01DbContext.SaveChangesAsync();
+            await tp01DbContext.TypesProduit.AddAsync(entity);
+            await tp01DbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(TypeProduit entity)
         {
-            tP01DbContext.TypesProduit.Remove(entity);
-            await tP01DbContext.SaveChangesAsync();
+            tp01DbContext.TypesProduit.Remove(entity);
+            await tp01DbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(TypeProduit entityToUpdate, TypeProduit entity)
         {
-            tP01DbContext.Entry(entityToUpdate).State = EntityState.Modified;
+            tp01DbContext.Entry(entityToUpdate).State = EntityState.Modified;
             entityToUpdate.IdTypeProduit = entity.IdTypeProduit;
             entityToUpdate.NomTypeProduit = entity.NomTypeProduit;
-            await tP01DbContext.SaveChangesAsync();
+            await tp01DbContext.SaveChangesAsync();
         }
     }
 }

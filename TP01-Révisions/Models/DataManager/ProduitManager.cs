@@ -8,7 +8,7 @@ namespace TP01_Révisions.Models.DataManager
 {
     public class ProduitManager : IDataRepository<Produit>, IDataRepositoryProduitDTO, IDataRepositoryProduitDetailDTO
     {
-        readonly TP01DbContext tP01DbContext;
+        readonly TP01DbContext tp01DbContext;
 
         public ProduitManager()
         {
@@ -17,12 +17,12 @@ namespace TP01_Révisions.Models.DataManager
 
         public ProduitManager(TP01DbContext context)
         {
-            tP01DbContext = context;
+            tp01DbContext = context;
         }
 
         public async Task<ActionResult<IEnumerable<ProduitDto>>> GetAllAsync()
         {
-            var produitsDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDto
+            var produitsDto = await tp01DbContext.Produits.Select(pdtToDto => new ProduitDto
             {
                 Id = pdtToDto.IdProduit,
                 Nom = pdtToDto.NomProduit,
@@ -35,7 +35,7 @@ namespace TP01_Révisions.Models.DataManager
 
         public async Task<ActionResult<ProduitDetailDto>> GetByIdAsync(int id)
         {
-            var produitDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDetailDto
+            var produitDto = await tp01DbContext.Produits.Select(pdtToDto => new ProduitDetailDto
             {
                 Id = pdtToDto.IdProduit,
                 Nom = pdtToDto.NomProduit,
@@ -54,7 +54,7 @@ namespace TP01_Révisions.Models.DataManager
 
         public async Task<ActionResult<ProduitDetailDto>> GetByStringAsync(string str)
         {
-            var produitDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDetailDto
+            var produitDto = await tp01DbContext.Produits.Select(pdtToDto => new ProduitDetailDto
             {
                 Id = pdtToDto.IdProduit,
                 Nom = pdtToDto.NomProduit,
@@ -72,7 +72,7 @@ namespace TP01_Révisions.Models.DataManager
         
         public async Task<ActionResult<ProduitDto>> GetSummaryByIdAsync(int id)
         {
-            var produitDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDto
+            var produitDto = await tp01DbContext.Produits.Select(pdtToDto => new ProduitDto
             {
                 Id = pdtToDto.IdProduit,
                 Nom = pdtToDto.NomProduit,
@@ -85,7 +85,7 @@ namespace TP01_Révisions.Models.DataManager
 
         public async Task<ActionResult<ProduitDto>> GetSummaryByStringAsync(string str)
         {
-            var produitDto = await tP01DbContext.Produits.Select(pdtToDto => new ProduitDto
+            var produitDto = await tp01DbContext.Produits.Select(pdtToDto => new ProduitDto
             {
                 Id = pdtToDto.IdProduit,
                 Nom = pdtToDto.NomProduit,
@@ -98,19 +98,19 @@ namespace TP01_Révisions.Models.DataManager
 
         public async Task AddAsync(Produit entity)
         {
-            await tP01DbContext.Produits.AddAsync(entity);
-            await tP01DbContext.SaveChangesAsync();
+            await tp01DbContext.Produits.AddAsync(entity);
+            await tp01DbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Produit entity)
         {
-            tP01DbContext.Produits.Remove(entity);
-            await tP01DbContext.SaveChangesAsync();
+            tp01DbContext.Produits.Remove(entity);
+            await tp01DbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Produit entityToUpdate, Produit entity)
         {
-            tP01DbContext.Entry(entityToUpdate).State = EntityState.Modified;
+            tp01DbContext.Entry(entityToUpdate).State = EntityState.Modified;
             entityToUpdate.IdProduit = entity.IdProduit;
             entityToUpdate.NomProduit = entity.NomProduit;
             entityToUpdate.Description = entity.Description;
@@ -121,7 +121,7 @@ namespace TP01_Révisions.Models.DataManager
             entityToUpdate.StockReel = entity.StockReel;
             entityToUpdate.StockMin = entity.StockMin;
             entityToUpdate.StockMax = entity.StockMax;
-            await tP01DbContext.SaveChangesAsync();
+            await tp01DbContext.SaveChangesAsync();
         }
     }
 }
