@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using TP01_Révisions.Models.DTO;
 using TP01_Révisions.Models.EntityFramework;
 using TP01_Révisions.Models.Repository;
 
@@ -6,24 +8,34 @@ namespace TP01_Révisions.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TypesProduitController : ControllerBase
+    public class TypeProduitsController : ControllerBase
     {
         private readonly IDataRepository<TypeProduit> dataRepository;
+        private readonly IDataRepositoryDetailDTO<TypeProduit> dataRepositoryTypeProduitDetailDTO;
+        private readonly IDataRepositoryTypeProduitDTO dataRepositoryTypeProduitDTO;
+        private readonly IMapper mapper;
 
-        public TypesProduitController(IDataRepository<TypeProduit> _dataRepository)
+        public TypeProduitsController(IDataRepository<TypeProduit> _dataRepository)
         {
             dataRepository = _dataRepository;
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TypeProduitDto, TypeProduit>();
+            });
+
+            mapper = config.CreateMapper();
         }
 
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TypeProduit>> GetAllTypesProduit()
+        public async Task<ActionResult<TypeProduitDto>> GetAllTypeProduits()
         {
-            var typesProduit = await dataRepository.GetAllAsync();
+            var typeProduits = await dataRepositoryTypeProduitDTO.GetAllAsync();
 
-            if (typesProduit == null)
+            if (typeProduits == null)
             {
                 return NotFound();
             }
@@ -37,7 +49,7 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TypeProduit>> GetTypeProduitById(int id)
         {
-            var typeProduit = await dataRepository.GetByIdAsync(id);
+            var typeProduit = await dataRepositoryTypeProduitDetailDTO.GetByIdAsync(id);
 
             // Check if typeProduit exists
             if (typeProduit.Value == null)
@@ -54,7 +66,41 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TypeProduit>> GetTypeProduitByNom(string str)
         {
-            var typeProduit = await dataRepository.GetByStringAsync(str);
+            var typeProduit = await dataRepositoryTypeProduitDetailDTO.GetByStringAsync(str);
+
+            // Checks if such a typeProduit exists
+            if (typeProduit.Value == null)
+            {
+                return NotFound();
+            }
+
+            return typeProduit;
+        }
+
+        [HttpGet]
+        [Route("SummaryById/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<TypeProduitDto>> GetTypeProduitSummaryById(int id)
+        {
+            var typeProduit = await dataRepositoryTypeProduitDTO.GetSummaryByIdAsync(id);
+
+            // Check if typeProduit exists
+            if (typeProduit.Value == null)
+            {
+                return NotFound();
+            }
+
+            return typeProduit;
+        }
+
+        [HttpGet]
+        [Route("SummaryByNom/{str}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<TypeProduitDto>> GetTypeProduitSummaryByNom(string str)
+        {
+            var typeProduit = await dataRepositoryTypeProduitDTO.GetSummaryByStringAsync(str);
 
             // Checks if such a typeProduit exists
             if (typeProduit.Value == null)
@@ -71,10 +117,10 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TypeProduit>> PutTypeProduit(int id, TypeProduit typeProduit)
         {
-            var typeProduitToUpdate = await dataRepository.GetByIdAsync(id);
+            var typeProduitDtoToUpdate = await dataRepositoryTypeProduitDTO.GetSummaryByIdAsync(id);
 
             // Check if typeProduit exists
-            if (typeProduitToUpdate.Value == null)
+            if (typeProduitDtoToUpdate.Value == null)
             {
                 return NotFound();
             }
@@ -85,19 +131,27 @@ namespace TP01_Révisions.Controllers
                 return BadRequest();
             }
 
-            await dataRepository.UpdateAsync(typeProduitToUpdate.Value, typeProduit);
+            TypeProduit typeProduitToUpdate = mapper.Map<TypeProduit>(typeProduitDtoToUpdate.Value);
+
+            await dataRepository.UpdateAsync(typeProduitToUpdate, typeProduit);
             return Ok();
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Marque>> PostTypeProduit(TypeProduit typeProduit)
+        public async Task<ActionResult<TypeProduit>> PostTypeProduit(TypeProduit typeProduit)
         {
-            var existingTypeProduit = await dataRepository.GetByIdAsync(typeProduit.IdTypeProduit);
+            var existingTypeProduit = await dataRepositoryTypeProduitDTO.GetSummaryByIdAsync(typeProduit.IdTypeProduit);
 
-            // Checks if marque already exists
+            // Checks if typeProduit already exists
             if (existingTypeProduit.Value != null)
+            {
+                return BadRequest();
+            }
+
+            // Checks if every required data is here
+            if (typeProduit.IdTypeProduit == null)
             {
                 return BadRequest();
             }
@@ -111,15 +165,17 @@ namespace TP01_Révisions.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TypeProduit>> DeleteTypeProduit(int id)
         {
-            var typeProduit = await dataRepository.GetByIdAsync(id);
+            var typeProduitDto = await dataRepositoryTypeProduitDTO.GetSummaryByIdAsync(id);
 
-            // Checks if user exists
-            if (typeProduit.Value == null)
+            // Checks if product exists
+            if (typeProduitDto.Value == null)
             {
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(typeProduit.Value);
+            TypeProduit typeProduitToDelete = mapper.Map<TypeProduit>(typeProduitDto.Value);
+
+            await dataRepository.DeleteAsync(typeProduitToDelete);
             return Ok();
         }
     }

@@ -22,6 +22,7 @@ namespace TP01_Révisions.Controllers
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<ProduitDto, Produit>();
             });
+
             mapper = config.CreateMapper();
         }
 
