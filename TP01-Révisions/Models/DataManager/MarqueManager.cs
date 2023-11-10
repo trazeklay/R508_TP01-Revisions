@@ -22,11 +22,11 @@ namespace TP01_Révisions.Models.DataManager
 
         public async Task<ActionResult<IEnumerable<MarqueDto>>> GetAllAsync()
         {
-            var marquesDto = await tp01DbContext.Produits.Select(mrqtoDto => new MarqueDto
+            var marquesDto = await tp01DbContext.Marques.Select(mrqToDto => new MarqueDto
             {
-                Id = mrqtoDto.IdProduit,
-                Nom = mrqtoDto.NomProduit,
-                NbProduits = mrqtoDto.MarquesProduits.ProduitsMarque.Count()
+                Id = mrqToDto.IdMarque,
+                Nom = mrqToDto.NomMarque,
+                NbProduits = mrqToDto.ProduitsMarque.Count()
             }).ToListAsync();
 
             return marquesDto;
@@ -34,12 +34,51 @@ namespace TP01_Révisions.Models.DataManager
 
         public async Task<ActionResult<Marque>> GetByIdAsync(int id)
         {
-            return await tp01DbContext.Marques.FirstOrDefaultAsync(mar => mar.IdMarque == id);
+            var marqueDto = await tp01DbContext.Marques.Select(mrqToDto => new Marque
+            {
+                IdMarque = mrqToDto.IdMarque,
+                NomMarque = mrqToDto.NomMarque,
+                ProduitsMarque = mrqToDto.ProduitsMarque
+            }).FirstOrDefaultAsync(mrqDto => mrqDto.IdMarque == id);
+
+            return marqueDto;
         }
+
 
         public async Task<ActionResult<Marque>> GetByStringAsync(string str)
         {
-            return await tp01DbContext.Marques.FirstOrDefaultAsync(mar => mar.NomMarque == str);
+            var marqueDto = await tp01DbContext.Marques.Select(mrqToDto => new Marque
+            {
+                IdMarque = mrqToDto.IdMarque,
+                NomMarque = mrqToDto.NomMarque,
+                ProduitsMarque = mrqToDto.ProduitsMarque
+            }).FirstOrDefaultAsync(mrqDto => mrqDto.NomMarque == str);
+
+            return marqueDto;
+        }
+
+        public async Task<ActionResult<MarqueDto>> GetSummaryByIdAsync(int id)
+        {
+            var marqueDto = await tp01DbContext.Marques.Select(mrqToDto => new MarqueDto
+            {
+                Id = mrqToDto.IdMarque,
+                Nom = mrqToDto.NomMarque,
+                NbProduits = mrqToDto.ProduitsMarque.Count()
+            }).FirstOrDefaultAsync(mrqDto => mrqDto.Id == id);
+
+            return marqueDto;
+        }
+
+        public async Task<ActionResult<MarqueDto>> GetSummaryByStringAsync(string str)
+        {
+            var marqueDto = await tp01DbContext.Marques.Select(mrqToDto => new MarqueDto
+            {
+                Id = mrqToDto.IdMarque,
+                Nom = mrqToDto.NomMarque,
+                NbProduits = mrqToDto.ProduitsMarque.Count()
+            }).FirstOrDefaultAsync(mrqDto => mrqDto.Nom == str);
+
+            return marqueDto;
         }
 
         public async Task AddAsync(Marque entity)
@@ -59,22 +98,8 @@ namespace TP01_Révisions.Models.DataManager
             tp01DbContext.Entry(entityToUpdate).State = EntityState.Modified;
             entityToUpdate.IdMarque = entity.IdMarque;
             entityToUpdate.NomMarque = entity.NomMarque;
+            entityToUpdate.ProduitsMarque = entity.ProduitsMarque;
             await tp01DbContext.SaveChangesAsync();
-        }
-
-        public Task<ActionResult<MarqueDto>> GetSummaryByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ActionResult<MarqueDto>> GetSummaryByStringAsync(string str)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ActionResult<IEnumerable<MarqueDto>>> IDataRepositoryDTO<MarqueDto>.GetAllAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }
