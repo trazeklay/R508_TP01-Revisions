@@ -6,7 +6,7 @@ using TP01_Révisions.Models.DTO;
 
 namespace TP01_Révisions.Models.DataManager
 {
-    public class MarqueManager : IDataRepository<Marque>, IDataRepositoryMarqueDTO
+    public class MarqueManager : IDataRepository<Marque>, IDataRepositoryDTO<MarqueDto>, IDataRepositoryDetailDTO<Marque>
     {
         readonly TP01DbContext tp01DbContext;
 
@@ -98,7 +98,7 @@ namespace TP01_Révisions.Models.DataManager
             tp01DbContext.Entry(entityToUpdate).State = EntityState.Modified;
             entityToUpdate.IdMarque = entity.IdMarque;
             entityToUpdate.NomMarque = entity.NomMarque;
-            entityToUpdate.ProduitsMarque = entity.ProduitsMarque;
+            entityToUpdate.ProduitsMarque = entity.ProduitsMarque
             await tp01DbContext.SaveChangesAsync();
         }
     }

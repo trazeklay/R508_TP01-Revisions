@@ -6,7 +6,7 @@ using TP01_Révisions.Models.DTO;
 
 namespace TP01_Révisions.Models.DataManager
 {
-    public class ProduitManager : IDataRepository<Produit>, IDataRepositoryProduitDTO, IDataRepositoryProduitDetailDTO
+    public class ProduitManager : IDataRepository<Produit>, IDataRepositoryDTO<ProduitDto>, IDataRepositoryDetailDTO<ProduitDetailDto>
     {
         readonly TP01DbContext tp01DbContext;
 
