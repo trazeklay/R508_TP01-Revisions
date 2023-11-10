@@ -1,10 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TP01_Révisions.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Moq;
 using TP01_Révisions.Models.EntityFramework;
 using TP01_Révisions.Models.Repository;
@@ -17,6 +11,8 @@ namespace TP01_Révisions.Controllers.Tests
     {
         private MarquesController _controller;
         private TP01DbContext context;
+
+
         private Mock<IDataRepository<Marque>> _mockRepo;
 
         [TestInitialize]

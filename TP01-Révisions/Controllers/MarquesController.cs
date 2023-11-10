@@ -12,7 +12,7 @@ namespace TP01_Révisions.Controllers
     {
         private readonly IDataRepository<Marque> dataRepository;
         private readonly IDataRepositoryDetailDTO<Marque> dataRepositoryMarqueDetailDTO;
-        private readonly IDataRepositoryMarqueDTO dataRepositoryMarqueDTO;
+        private readonly IDataRepositoryDTO<MarqueDto> dataRepositoryMarqueDTO;
         private readonly IMapper mapper;
 
         public MarquesController(IDataRepository<Marque> _dataRepository)

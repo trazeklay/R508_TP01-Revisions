@@ -11,8 +11,8 @@ namespace TP01_Révisions.Controllers
     public class ProduitsController : ControllerBase
     {
         private readonly IDataRepository<Produit> dataRepository;
-        private readonly IDataRepositoryProduitDetailDTO dataRepositoryProduitDetailDTO;
-        private readonly IDataRepositoryProduitDTO dataRepositoryProduitDTO;
+        private readonly IDataRepositoryDetailDTO<ProduitDetailDto> dataRepositoryProduitDetailDTO;
+        private readonly IDataRepositoryDTO<ProduitDto> dataRepositoryProduitDTO;
         private readonly IMapper mapper;
 
         public ProduitsController(IDataRepository<Produit> _dataRepository)

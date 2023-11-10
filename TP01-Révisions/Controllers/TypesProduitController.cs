@@ -12,7 +12,7 @@ namespace TP01_Révisions.Controllers
     {
         private readonly IDataRepository<TypeProduit> dataRepository;
         private readonly IDataRepositoryDetailDTO<TypeProduit> dataRepositoryTypeProduitDetailDTO;
-        private readonly IDataRepositoryTypeProduitDTO dataRepositoryTypeProduitDTO;
+        private readonly IDataRepositoryDTO<TypeProduitDto> dataRepositoryTypeProduitDTO;
         private readonly IMapper mapper;
 
         public TypeProduitsController(IDataRepository<TypeProduit> _dataRepository)
