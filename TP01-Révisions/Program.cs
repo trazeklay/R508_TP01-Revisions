@@ -18,6 +18,17 @@ namespace TP01_Révisions
 
             builder.Services.AddDbContext<TP01DbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("TP01DBContext")));
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:45184")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TP01-Révisions", "TP01-Révisions\TP01-Révisions.csproj", "{2C4E4AD2-9D9E-4465-B790-2E61F778745C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TP01-Révisions", "TP01-Révisions\TP01-Révisions.csproj", "{2C4E4AD2-9D9E-4465-B790-2E61F778745C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TP01-RévisionsTests2", "TP01-RévisionsTests2\TP01-RévisionsTests2.csproj", "{2F5A56D7-01F9-4DB4-88ED-EAC15FFD3915}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TP01-RévisionsTests2", "TP01-RévisionsTests2\TP01-RévisionsTests2.csproj", "{2F5A56D7-01F9-4DB4-88ED-EAC15FFD3915}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "R508_TP03_Blazor", "R508_TP03_Blazor\R508_TP03_Blazor.csproj", "{B1EB7B6C-D70A-4D00-A578-C4233A483586}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2F5A56D7-01F9-4DB4-88ED-EAC15FFD3915}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F5A56D7-01F9-4DB4-88ED-EAC15FFD3915}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F5A56D7-01F9-4DB4-88ED-EAC15FFD3915}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1EB7B6C-D70A-4D00-A578-C4233A483586}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1EB7B6C-D70A-4D00-A578-C4233A483586}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1EB7B6C-D70A-4D00-A578-C4233A483586}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1EB7B6C-D70A-4D00-A578-C4233A483586}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
