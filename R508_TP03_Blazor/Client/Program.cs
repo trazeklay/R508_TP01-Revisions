@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using R508_TP03_Blazor;
+using R508_TP03_Blazor.Services;
 
 namespace R508_TP03_Blazor
 {
@@ -12,7 +13,10 @@ namespace R508_TP03_Blazor
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            // Ajouter WSService
+            builder.Services.AddScoped<IService, WSService>();
+
+            // builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             await builder.Build().RunAsync();
         }
