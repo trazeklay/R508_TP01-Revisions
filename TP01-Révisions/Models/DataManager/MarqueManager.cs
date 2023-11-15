@@ -98,7 +98,7 @@ namespace TP01_Révisions.Models.DataManager
             tp01DbContext.Entry(entityToUpdate).State = EntityState.Modified;
             entityToUpdate.IdMarque = entity.IdMarque;
             entityToUpdate.NomMarque = entity.NomMarque;
-            entityToUpdate.ProduitsMarque = entity.ProduitsMarque
+            entityToUpdate.ProduitsMarque = entity.ProduitsMarque;
             await tp01DbContext.SaveChangesAsync();
         }
     }

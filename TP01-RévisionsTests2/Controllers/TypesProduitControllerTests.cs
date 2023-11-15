@@ -10,19 +10,21 @@ using TP01_Révisions.Models.EntityFramework;
 using TP01_Révisions.Models.Repository;
 using Microsoft.AspNetCore.Mvc;
 
+using TP01_Révisions.Controllers;
+
 namespace TP01_Révisions.Controllers.Tests
 {
     [TestClass()]
-    public class TypesProduitControllerTests
+    public class TypeProduitsControllerTests
     {
-        private TypesProduitController _controller;
+        private TypeProduitsController _controller;
         private Mock<IDataRepository<TypeProduit>> _mockRepo;
 
         [TestInitialize]
         public void Setup()
         {
             _mockRepo = new Mock<IDataRepository<TypeProduit>>();
-            _controller = new TypesProduitController(_mockRepo.Object);
+            _controller = new TypeProduitsController(_mockRepo.Object);
         }
 
         [TestMethod]
