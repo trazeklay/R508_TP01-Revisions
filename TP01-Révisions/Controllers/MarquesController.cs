@@ -11,13 +11,15 @@ namespace TP01_Révisions.Controllers
     public class MarquesController : ControllerBase
     {
         private readonly IDataRepository<Marque> dataRepository;
-        private readonly IDataRepositoryDetailDTO<Marque> dataRepositoryMarqueDetailDTO;
         private readonly IDataRepositoryDTO<MarqueDto> dataRepositoryMarqueDTO;
+        private readonly IDataRepositoryDetailDTO<Marque> dataRepositoryMarqueDetailDTO;
         private readonly IMapper mapper;
 
-        public MarquesController(IDataRepository<Marque> _dataRepository)
+        public MarquesController(IDataRepository<Marque> _dataRepository, IDataRepositoryDTO<MarqueDto> _dataRepositoryMarqueDTO, IDataRepositoryDetailDTO<Marque> _dataRepositoryMarqueDetailDTO)
         {
             dataRepository = _dataRepository;
+            dataRepositoryMarqueDTO = _dataRepositoryMarqueDTO;
+            dataRepositoryMarqueDetailDTO = _dataRepositoryMarqueDetailDTO;
 
             var config = new MapperConfiguration(cfg =>
             {

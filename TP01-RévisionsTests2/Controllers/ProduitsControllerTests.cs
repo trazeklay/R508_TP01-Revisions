@@ -10,6 +10,7 @@ using Moq;
 using TP01_Révisions.Models.EntityFramework;
 using TP01_Révisions.Models.Repository;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using TP01_Révisions.Models.DTO;
 
 namespace TP01_Révisions.Controllers.Tests
 {
@@ -17,13 +18,21 @@ namespace TP01_Révisions.Controllers.Tests
     public class ProduitsControllerTests
     {
         private ProduitsController _controller;
+        private TP01DbContext context;
+
         private Mock<IDataRepository<Produit>> _mockRepo;
+        private Mock<IDataRepositoryDTO<ProduitDto>> _mockRepoDto;
+        private Mock<IDataRepositoryDetailDTO<ProduitDetailDto>> _mockRepoDetailDto;
 
         [TestInitialize]
         public void Setup()
         {
             _mockRepo = new Mock<IDataRepository<Produit>>();
-            _controller = new ProduitsController(_mockRepo.Object);
+            _mockRepoDto = new Mock<IDataRepositoryDTO<ProduitDto>>();
+            _mockRepoDetailDto = new Mock<IDataRepositoryDetailDTO<ProduitDetailDto>>();
+
+            context = new TP01DbContext();
+            _controller = new ProduitsController(_mockRepo.Object, _mockRepoDto.Object, _mockRepoDetailDto.Object);
         }
 
         [TestMethod]
@@ -32,7 +41,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             int testId = 1;
             Produit testProduit = new Produit { IdProduit = testId, NomProduit = "Laptop", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Produit>(testProduit));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<ProduitDetailDto>(testProduit));
 
             // Act
             var result = await _controller.GetProduitById(testId);
@@ -47,7 +56,7 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             int testId = 1;
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Produit>((Produit)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<ProduitDetailDto>((ProduitDetailDto)null));
 
             // Act
             var result = await _controller.GetProduitById(testId);
@@ -62,7 +71,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             string testName = "Laptop";
             Produit testProduit = new Produit { IdProduit = 1, NomProduit = testName, IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
-            _mockRepo.Setup(repo => repo.GetByStringAsync(testName)).ReturnsAsync(new ActionResult<Produit>(testProduit));
+            _mockRepoDetailDto.Setup(repo => repo.GetByStringAsync(testName)).ReturnsAsync(new ActionResult<ProduitDetailDto>(testProduit));
 
             // Act
             var result = await _controller.GetProduitByNom(testName);
@@ -77,7 +86,7 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             string testName = "Laptop";
-            _mockRepo.Setup(repo => repo.GetByStringAsync(testName)).ReturnsAsync(new ActionResult<Produit>((Produit)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByStringAsync(testName)).ReturnsAsync(new ActionResult<ProduitDetailDto>((ProduitDetailDto)null));
 
             // Act
             var result = await _controller.GetProduitByNom(testName);
@@ -93,7 +102,7 @@ namespace TP01_Révisions.Controllers.Tests
             int testId = 1;
             Produit existingProduit = new Produit { IdProduit = testId, NomProduit = "Laptop", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
             Produit updatedProduit = new Produit { IdProduit = testId, NomProduit = "Pacarbel", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Produit>(existingProduit));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<ProduitDetailDto>(existingProduit));
 
             // Act
             var result = await _controller.PutProduit(testId, updatedProduit);
@@ -108,7 +117,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             int testId = 1;
             Produit produit = new Produit { IdProduit = testId, NomProduit = "Laptop", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Produit>((Produit)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<ProduitDetailDto>((ProduitDetailDto)null));
 
             // Act
             var result = await _controller.PutProduit(testId, produit);
@@ -123,7 +132,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             int testId = 1;
             Produit produit = new Produit { IdProduit = 2, NomProduit = "Pacarbel", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Produit>(produit));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<ProduitDetailDto>(produit));
 
             // Act
             var result = await _controller.PutProduit(testId, produit);
@@ -138,7 +147,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             Produit existingProduit = new Produit { IdProduit = 1, NomProduit = "Laptop", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
             Produit newProduit = new Produit { IdProduit = 1, NomProduit = "Pacarbel", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(existingProduit.IdProduit)).ReturnsAsync(new ActionResult<Produit>(existingProduit));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(existingProduit.IdProduit)).ReturnsAsync(new ActionResult<ProduitDetailDto>(existingProduit));
 
             // Act
             var result = await _controller.PostProduit(newProduit);
@@ -152,7 +161,7 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             Produit produit = new Produit { IdProduit = 1, NomProduit = "Pacarbel", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(produit.IdProduit)).ReturnsAsync(new ActionResult<Produit>((Produit)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(produit.IdProduit)).ReturnsAsync(new ActionResult<ProduitDetailDto>((Produit)null));
 
             // Act
             var result = await _controller.PostProduit(produit);
@@ -167,7 +176,7 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             int testId = 1;
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Produit>((Produit)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<ProduitDetailDto>((ProduitDetailDto)null));
 
             // Act
             var result = await _controller.DeleteProduit(testId);
@@ -182,7 +191,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             int testId = 1;
             Produit produit = new Produit { IdProduit = 1, NomProduit = "Laptop", IdType = 1, IdMarque = 1, StockReel = 10, StockMin = 5, StockMax = 20 };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Produit>(produit));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<ProduitDetailDto>(produit));
 
             // Act
             var result = await _controller.DeleteProduit(testId);

@@ -11,16 +11,19 @@ namespace TP01_Révisions.Controllers
     public class ProduitsController : ControllerBase
     {
         private readonly IDataRepository<Produit> dataRepository;
-        private readonly IDataRepositoryDetailDTO<ProduitDetailDto> dataRepositoryProduitDetailDTO;
         private readonly IDataRepositoryDTO<ProduitDto> dataRepositoryProduitDTO;
+        private readonly IDataRepositoryDetailDTO<ProduitDetailDto> dataRepositoryProduitDetailDTO;
         private readonly IMapper mapper;
 
-        public ProduitsController(IDataRepository<Produit> _dataRepository)
+        public ProduitsController(IDataRepository<Produit> _dataRepository, IDataRepositoryDTO<ProduitDto> _dataRepositoryDTO, IDataRepositoryDetailDTO<ProduitDetailDto> _dataRepositoryProduitDetailDTO)
         {
             dataRepository = _dataRepository;
+            dataRepositoryProduitDTO = _dataRepositoryDTO;
+            dataRepositoryProduitDetailDTO = _dataRepositoryProduitDetailDTO;
 
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<ProduitDto, Produit>();
+                cfg.CreateMap<ProduitDetailDto, Produit>();
             });
 
             mapper = config.CreateMapper();

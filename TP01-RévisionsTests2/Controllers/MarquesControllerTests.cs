@@ -3,6 +3,7 @@ using Moq;
 using TP01_Révisions.Models.EntityFramework;
 using TP01_Révisions.Models.Repository;
 using Microsoft.AspNetCore.Mvc;
+using TP01_Révisions.Models.DTO;
 
 namespace TP01_Révisions.Controllers.Tests
 {
@@ -14,24 +15,34 @@ namespace TP01_Révisions.Controllers.Tests
 
 
         private Mock<IDataRepository<Marque>> _mockRepo;
+        private Mock<IDataRepositoryDTO<MarqueDto>> _mockRepoDto;
+        private Mock<IDataRepositoryDetailDTO<Marque>> _mockRepoDetailDto;
 
         [TestInitialize]
         public void Setup()
         {
             _mockRepo = new Mock<IDataRepository<Marque>>();
+            _mockRepoDto = new Mock<IDataRepositoryDTO<MarqueDto>>();
+            _mockRepoDetailDto = new Mock<IDataRepositoryDetailDTO<Marque>>();
+
             context = new TP01DbContext();
-            _controller = new MarquesController(_mockRepo.Object);
+            _controller = new MarquesController(_mockRepo.Object, _mockRepoDto.Object, _mockRepoDetailDto.Object);
         }
 
         [TestMethod]
         public async Task GetAllMarques_ReturnsNotFound_WhenNoMarquesInDatabase()
         {
             // Arrange
+            _mockRepoDto.Setup(repo => repo.GetAllAsync()).ReturnsAsync((List<MarqueDto>)null);
 
             // Act
+            var result = await _controller.GetAllMarques();
 
             // Assert
+            Assert.IsInstanceOfType(result.Result, typeof(NotFoundResult));
         }
+
+
 
         [TestMethod]
         public async Task GetMarqueById_ReturnsMarque_WhenMarqueExists()
@@ -39,7 +50,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             int testId = 1;
             Marque testMarque = new Marque { IdMarque = testId, NomMarque = "Aries Corp" };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>(testMarque));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>(testMarque));
 
             // Act
             var result = await _controller.GetMarqueById(testId);
@@ -54,7 +65,7 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             int testId = 1;
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
 
             // Act
             var result = await _controller.GetMarqueById(testId);
@@ -69,7 +80,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             string testName = "Aries Corp";
             Marque testMarque = new Marque { IdMarque = 1, NomMarque = testName };
-            _mockRepo.Setup(repo => repo.GetByStringAsync(testName)).ReturnsAsync(new ActionResult<Marque>(testMarque));
+            _mockRepoDetailDto.Setup(repo => repo.GetByStringAsync(testName)).ReturnsAsync(new ActionResult<Marque>(testMarque));
 
             // Act
             var result = await _controller.GetMarqueByNom(testName);
@@ -84,7 +95,7 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             string testName = "Aries Corp";
-            _mockRepo.Setup(repo => repo.GetByStringAsync(testName)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByStringAsync(testName)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
 
             // Act
             var result = await _controller.GetMarqueByNom(testName);
@@ -99,7 +110,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             int testId = 1;
             Marque marque = new Marque { IdMarque = testId, NomMarque = "Aries Corp" };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
 
             // Act
             var result = await _controller.PutMarque(testId, marque);
@@ -115,7 +126,7 @@ namespace TP01_Révisions.Controllers.Tests
             int testId = 1;
             Marque existingMarque = new Marque { IdMarque = testId, NomMarque = "ExistingMarque" };
             Marque updatedMarque = new Marque { IdMarque = 2, NomMarque = "UpdatedMarque" };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>(existingMarque));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>(existingMarque));
 
             // Act
             var result = await _controller.PutMarque(testId, updatedMarque);
@@ -131,7 +142,7 @@ namespace TP01_Révisions.Controllers.Tests
             int testId = 1;
             Marque existingMarque = new Marque { IdMarque = testId, NomMarque = "ExistingMarque" };
             Marque updatedMarque = new Marque { IdMarque = testId, NomMarque = "UpdatedMarque" };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>(existingMarque));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>(existingMarque));
 
             // Act
             var result = await _controller.PutMarque(testId, updatedMarque);
@@ -148,7 +159,7 @@ namespace TP01_Révisions.Controllers.Tests
             Marque newMarqueWithSameId = new Marque { IdMarque = 1, NomMarque = "Aries Corp" };
 
             // Setting up the mock repository to return the existingMarque when queried by ID
-            _mockRepo.Setup(repo => repo.GetByIdAsync(existingMarque.IdMarque)).ReturnsAsync(new ActionResult<Marque>(existingMarque));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(existingMarque.IdMarque)).ReturnsAsync(new ActionResult<Marque>(existingMarque));
 
             // Act
             var result = await _controller.PostMarque(newMarqueWithSameId);
@@ -162,7 +173,7 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             Marque marque = new Marque { IdMarque = 2, NomMarque = "Aries Corp" };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(marque.IdMarque)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(marque.IdMarque)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
 
             // Act
             var result = await _controller.PostMarque(marque);
@@ -177,7 +188,7 @@ namespace TP01_Révisions.Controllers.Tests
         {
             // Arrange
             int testId = 1;
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>((Marque)null));
 
             // Act
             var result = await _controller.DeleteMarque(testId);
@@ -192,7 +203,7 @@ namespace TP01_Révisions.Controllers.Tests
             // Arrange
             int testId = 1;
             Marque marque = new Marque { IdMarque = testId, NomMarque = "Aries Corp" };
-            _mockRepo.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>(marque));
+            _mockRepoDetailDto.Setup(repo => repo.GetByIdAsync(testId)).ReturnsAsync(new ActionResult<Marque>(marque));
 
             // Act
             var result = await _controller.DeleteMarque(testId);

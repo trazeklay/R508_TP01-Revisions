@@ -11,13 +11,15 @@ namespace TP01_Révisions.Controllers
     public class TypeProduitsController : ControllerBase
     {
         private readonly IDataRepository<TypeProduit> dataRepository;
-        private readonly IDataRepositoryDetailDTO<TypeProduit> dataRepositoryTypeProduitDetailDTO;
         private readonly IDataRepositoryDTO<TypeProduitDto> dataRepositoryTypeProduitDTO;
+        private readonly IDataRepositoryDetailDTO<TypeProduit> dataRepositoryTypeProduitDetailDTO;
         private readonly IMapper mapper;
 
-        public TypeProduitsController(IDataRepository<TypeProduit> _dataRepository)
+        public TypeProduitsController(IDataRepository<TypeProduit> _dataRepository, IDataRepositoryDTO<TypeProduitDto> _dataRepositoryDTO, IDataRepositoryDetailDTO<TypeProduit> _dataRepositoryDetailDTO)
         {
             dataRepository = _dataRepository;
+            dataRepositoryTypeProduitDTO = _dataRepositoryDTO;
+            dataRepositoryTypeProduitDetailDTO = _dataRepositoryDetailDTO;
 
             var config = new MapperConfiguration(cfg =>
             {
