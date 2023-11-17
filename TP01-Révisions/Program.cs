@@ -33,6 +33,8 @@ namespace TP01_Révisions
             });
 
 
+
+
             builder.Services.AddScoped<IDataRepository<Produit>, ProduitManager>();
             builder.Services.AddScoped<IDataRepository<TypeProduit>, TypeProduitManager>();
             builder.Services.AddScoped<IDataRepository<Marque>, MarqueManager>();

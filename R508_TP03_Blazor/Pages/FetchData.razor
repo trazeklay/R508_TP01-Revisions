@@ -1,5 +1,9 @@
 ﻿@page "/fetchdata"
-@inject HttpClient Http
+@using System.Text.Json;
+@using R508_TP03_Blazor.Services;
+@using R508_TP03_Blazor.Models;
+
+@inject WSService Http
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -35,18 +39,12 @@ else
 }
 
 @code {
-    private Produit[]? produits;
+    private List<ProduitDto> produits = new List<ProduitDto>();
+
+    private WSService service = new WSService("http://localhost:5295");
 
     protected override async Task OnInitializedAsync()
     {
-        var request = await Http.GetAsync("http://localhost:5295/api/Produits");
-    }
-
-    public class Produit
-    {
-        public int Id { get; set; }
-        public string? Nom { get; set; }
-        public string? Type { get; set; }
-        public string? Marque { get; set; }
+        produits = await service.GetProduitsAsync("Produits");
     }
 }
