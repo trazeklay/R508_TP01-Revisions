@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using TP01_Révisions.Models.DataManager;
+using TP01_Révisions.Models.DTO;
 using TP01_Révisions.Models.EntityFramework;
+using TP01_Révisions.Models.Repository;
 
 namespace TP01_Révisions
 {
@@ -28,6 +31,20 @@ namespace TP01_Révisions
                         .AllowAnyMethod();
                 });
             });
+
+
+            builder.Services.AddScoped<IDataRepository<Produit>, ProduitManager>();
+            builder.Services.AddScoped<IDataRepository<TypeProduit>, TypeProduitManager>();
+            builder.Services.AddScoped<IDataRepository<Marque>, MarqueManager>();
+            
+            builder.Services.AddScoped<IDataRepositoryDTO<ProduitDto>, ProduitManager>();
+            builder.Services.AddScoped<IDataRepositoryDTO<TypeProduitDto>, TypeProduitManager>();
+            builder.Services.AddScoped<IDataRepositoryDTO<MarqueDto>, MarqueManager>();
+            
+            builder.Services.AddScoped<IDataRepositoryDetailDTO<ProduitDetailDto>, ProduitManager>();
+            builder.Services.AddScoped<IDataRepositoryDetailDTO<TypeProduit>, TypeProduitManager>();
+            builder.Services.AddScoped<IDataRepositoryDetailDTO<Marque>, MarqueManager>();
+
 
             var app = builder.Build();
 
