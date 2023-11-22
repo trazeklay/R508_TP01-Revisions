@@ -42,7 +42,7 @@ namespace TP01_Révisions.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            return Ok(typeProduits.Value);
         }
 
         [HttpGet]
@@ -136,7 +136,7 @@ namespace TP01_Révisions.Controllers
             TypeProduit typeProduitToUpdate = mapper.Map<TypeProduit>(typeProduitDtoToUpdate.Value);
 
             await dataRepository.UpdateAsync(typeProduitToUpdate, typeProduit);
-            return Ok();
+            return Ok(typeProduitDtoToUpdate.Value);
         }
 
         [HttpPost]
@@ -178,7 +178,7 @@ namespace TP01_Révisions.Controllers
             TypeProduit typeProduitToDelete = mapper.Map<TypeProduit>(typeProduitDto.Value);
 
             await dataRepository.DeleteAsync(typeProduitToDelete);
-            return Ok();
+            return Ok(typeProduitDto.Value);
         }
     }
 }

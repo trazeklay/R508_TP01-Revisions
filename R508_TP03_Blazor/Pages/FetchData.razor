@@ -3,8 +3,6 @@
 @using R508_TP03_Blazor.Services;
 @using R508_TP03_Blazor.Models;
 
-@inject WSService Http
-
 <PageTitle>Weather forecast</PageTitle>
 
 <h1>Weather forecast</h1>
@@ -41,7 +39,7 @@ else
 @code {
     private List<ProduitDto> produits = new List<ProduitDto>();
 
-    private WSService service = new WSService("http://localhost:5295");
+    private WSService service = new WSService("https://localhost:7175/api/");
 
     protected override async Task OnInitializedAsync()
     {

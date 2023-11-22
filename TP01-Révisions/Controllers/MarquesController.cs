@@ -42,7 +42,7 @@ namespace TP01_Révisions.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            return Ok(marques.Value);
         }
 
         [HttpGet]
@@ -136,7 +136,7 @@ namespace TP01_Révisions.Controllers
             Marque marqueToUpdate = mapper.Map<Marque>(marqueDtoToUpdate.Value);
 
             await dataRepository.UpdateAsync(marqueToUpdate, marque);
-            return Ok();
+            return Ok(marqueDtoToUpdate.Value);
         }
 
         [HttpPost]
@@ -178,7 +178,7 @@ namespace TP01_Révisions.Controllers
             Marque marqueToDelete = mapper.Map<Marque>(marqueDto.Value);
 
             await dataRepository.DeleteAsync(marqueToDelete);
-            return Ok();
+            return Ok(marqueDto.Value);
         }
     }
 }

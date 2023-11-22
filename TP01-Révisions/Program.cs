@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using TP01_Révisions.Models.DataManager;
 using TP01_Révisions.Models.DTO;
 using TP01_Révisions.Models.EntityFramework;
@@ -20,20 +21,6 @@ namespace TP01_Révisions
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<TP01DbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("TP01DBContext")));
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(policy =>
-                {
-                    policy
-                        .WithOrigins("http://localhost:45184")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
-
-
-
 
             builder.Services.AddScoped<IDataRepository<Produit>, ProduitManager>();
             builder.Services.AddScoped<IDataRepository<TypeProduit>, TypeProduitManager>();
@@ -61,6 +48,14 @@ namespace TP01_Révisions
 
             app.UseAuthorization();
 
+            app.UseCors(policy =>
+            {
+                policy
+                    .WithOrigins("https://localhost:7178")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
 
             app.MapControllers();
 
